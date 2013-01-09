@@ -18,6 +18,22 @@ echo (new Template('jediTest'))->render();
 ```
 
 第三步：在htdocs/view/  文件夹下新建jediTest.jedi：
-'‘hello world'
+```shell
+‘hello world
+```
 
 第四步：打开www.yourname.baixing.cn/p/jediTest.php，出现hello world，环境搭建成功！
+
+## 1. HTML页面
+
+### 一、标签
+(1)jedi中，直接写一个单独的单词即代表一个HTML标签：
+Jedi:
+```shell
+div
+```
+
+对应的HTML:
+```shell
+<div></div>
+```
