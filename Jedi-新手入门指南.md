@@ -41,7 +41,7 @@ div
 (2)标签的属性写在‘@’后面。  
 Jedi:
 ```shell
-div @name=“BigSheep” @nick=“大绵羊”
+div @name="BigSheep" @nick="大绵羊"
 ```
 
 对应的HTML:
@@ -49,10 +49,10 @@ div @name=“BigSheep” @nick=“大绵羊”
 <div name="BisSheep" nick="大绵羊"></div>
 ```
 
-(3)标签的class属性可以直接用'.'表示，id属性可以直接用'#'表示。
+(3)标签的class属性可以直接用'.'表示，id属性可以直接用'#'表示。  
 Jedi:
 ```shell
-Span.Big#sheep @name="BigSheep“
+Span.Big#sheep @name="BigSheep"
 ```
 
 对应的HTML:
@@ -62,7 +62,7 @@ Span.Big#sheep @name="BigSheep“
 
 ### 二、文本
 
-(1)以单引号开头时，写什么输出什么：
+(1)以单引号开头时，写什么输出什么：  
 Jedi:
 ```shell
 '12345^&*(
@@ -73,7 +73,7 @@ Jedi:
 12345^&*(
 ```
 
-(2)以双引号开头时，可以使用{}插入PHP变量：
+(2)以双引号开头时，可以使用{}插入PHP变量：  
 Jedi：
 ```shell
 “ {Bigsheep}
@@ -86,7 +86,7 @@ echo htmlspecialchars($data->bigsheep);
 ?>
 ```
 
-(3)以！开头的内容为注释掉的文本，会输出到浏览器中，但不会显示出来。
+(3)以！开头的内容为注释掉的文本，会输出到浏览器中，但不会显示出来。  
 Jedi:
 ```shell
 ! 大绵羊是noooooooooooooob？！
@@ -99,8 +99,7 @@ Jedi:
 
 ### 三、层次关系
 
-1）Jedi由缩进表达层级关系。
-
+1）Jedi由缩进表达层级关系。  
 Jedi：
 ```shell
 div
@@ -126,7 +125,7 @@ div
 12345
 ```
 
-(2)Jedi由缩进表达层级关系，例二。
+(2)Jedi由缩进表达层级关系，例二。  
 Jedi:
 ```shell
 div
@@ -150,7 +149,7 @@ div
 ## 2. 页面逻辑
 
 ### 一、循环：
-(1)简单foreach
+(1)简单foreach  
 Jedi:
 ```shell
 :for sheep in sheeps
@@ -166,7 +165,7 @@ foreach ($data->sheeps as $sheep)  {
 ?>
 ```
 
-(2)key，value形式的foreach
+(2)key，value形式的foreach  
 Jedi:
 ```shell
 :for (key, value) in sheeps
@@ -184,7 +183,7 @@ foreach ($data->sheeps as $key => $value)  {
 
 ### 二、条件判断
 
-(1)裸if
+(1)裸if  
 Jedi:
 ```shell
 :if a > b
@@ -200,7 +199,7 @@ if ($data->a > $data->b) {
 ?>
 ```
 
-(2)if + else + elseif
+(2)if + else + elseif  
 Jedi:
 ```shell
 :if a > b
@@ -226,7 +225,7 @@ if ($data->a > $data->b) {
 
 ### 三、赋值
 
-（1）使用:let关键字对临时变量进行赋值
+（1）使用:let关键字对临时变量进行赋值  
 Jedi：
 ```shell
 :let bigsheep = ‘杨敏达’
@@ -241,7 +240,7 @@ echo htmlspecialchars($bigsheep);
 ?>
 ```
 
-（2）使用:let赋值时，只对当前block生效
+（2）使用:let赋值时，只对当前block生效  
 Jedi(设$data->a的值为字符串’1234’):
 ```shell
 “{a}
@@ -260,7 +259,7 @@ Jedi(设$data->a的值为字符串’1234’):
 ## 3. 注入与注释
 
 ### 一、注入
-(1)PHP注入，'-'后面直接写PHP语句。请尽量不要使用，一定要使用请做好被TJJ的觉悟
+(1)PHP注入，'-'后面直接写PHP语句。请尽量不要使用，一定要使用请做好被TJJ的觉悟  
 Jedi:
 ```shell
 -$clever = BigSheep::isShaBiOrNot('yangminda')
@@ -273,7 +272,7 @@ $clever = BigSheep::isShaBiOrNot('yangminda');
 ?>
 ```
 
-(2)JS注入，使用‘!‘实现，格式如下
+(2)JS注入，使用‘!‘实现，格式如下  
 Jedi：
 ```shell
 script
@@ -292,7 +291,7 @@ script
 
 ### 二、注释
 
-(1)注释一行
+(1)注释一行  
 Jedi:
 ```shell
 //我是大绵羊
@@ -307,7 +306,7 @@ Jedi:
 ?>
 ```
 
-(2)注释一段，使用'--'可以注释掉整个段落。
+(2)注释一段，使用'--'可以注释掉整个段落。  
 Jedi:
 ```shell
 --div.bigsheep
@@ -330,7 +329,7 @@ Jedi:
 
 ### 4. 外部方法与静态方法
 
-(1)引用php函数
+(1)引用php函数  
 Jedi:
 ```shell
 :external is_array		（声明了外部函数is_array）
@@ -347,7 +346,7 @@ if (is_array($data->a)) {
 ?>
 ```
 
-(2)引用包涵静态方法的PHP类
+(2)引用包涵静态方法的PHP类  
 Jedi:
 ```shell
 :external Category
@@ -379,10 +378,10 @@ if (Category::exist($data->categoryName)) {
 ## 0. 变量、方法与表达式
 
 ### 一、成员变量与成员方法
-（1）Jedi中成员变量用“.”连接
+（1）Jedi中成员变量用“.”连接  
 Jedi：
 ```shell
-“{ad.categoryEnglishName}
+"{ad.categoryEnglishName}
 ```
 
 对应的PHP：
@@ -390,7 +389,7 @@ Jedi：
 <?= $data->ad->categoryEnglishName); ?>
 ```
 
-（2）成员方法
+（2）成员方法  
 Jedi：
 ```shell
 “{ad.getPrice(adId)}
@@ -401,7 +400,7 @@ Jedi：
 <?=  $data->ad->getPrice($data->adId); ?>
 ```
 
-（3）‘$’会作为额外符号加入PHP变量名中
+（3）‘$’会作为额外符号加入PHP变量名中  
 Jedi：
 ```shell
 “{$variableName}
@@ -414,7 +413,7 @@ Jedi：
 
 ### 二、表达式
 
-（1）Jedi中表达式的 运算符 与 优先级 同PHP
+（1）Jedi中表达式的 运算符 与 优先级 同PHP  
 Jedi：
 ```shell
 “{(a + b) * !c}
@@ -425,7 +424,7 @@ Jedi：
 <?=  ($data->a + $data->b) * !$data->c ?>
 ```
 
-（2）使用’  if   then else ’ 表示 ‘?   :  ‘ 
+（2）使用’  if   then else ’ 表示 ‘?   :  ‘   
 Jedi:
 ```shell
 “{if  a > b then ‘good’ else ‘bad’}
@@ -486,7 +485,7 @@ Layout.jedi包涵基本的header、footer等。
 
 ## 2.闭包
 
-（1）Jedi中的闭包类似于一个PHP函数，使用方法如下：
+（1）Jedi中的闭包类似于一个PHP函数，使用方法如下：  
 Jedi：
 ```shell
 :: time.friendly ()           	定义一个名称为time.friendly的闭包
@@ -500,7 +499,7 @@ time.friendly =  ‘12345’ 	引用闭包，参数为‘12345’
 12345
 ```
 
-（2）闭包的参数可以是一个简单类型的变量，也可以是一个数组或一个实例。
+（2）闭包的参数可以是一个简单类型的变量，也可以是一个数组或一个实例。  
 Jedi：
 ```shell
 :: time.friendly ()           	
