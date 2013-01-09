@@ -34,7 +34,7 @@ echo (new Template('jediTest'))->render();
 
 第三步：在htdocs/view/  文件夹下新建jediTest.jedi：
 ```shell
-‘hello world
+'hello world
 ```
 
 第四步：打开www.yourname.baixing.cn/p/jediTest.php，出现hello world，环境搭建成功！
