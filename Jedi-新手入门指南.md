@@ -240,14 +240,14 @@ if ($data->a > $data->b) {
 （1）使用:let关键字对临时变量进行赋值  
 Jedi：
 ```shell
-:let bigsheep = ‘杨敏达’
-		"{bigsheep}
+:let bigsheep = '杨敏达'
+	"{bigsheep}
 ```
 
 对应的PHP：
 ```shell
 <?php
-$bigsheep = ‘杨敏达’;
+$bigsheep = '杨敏达';
 echo htmlspecialchars($bigsheep);
 ?>
 ```
@@ -256,8 +256,8 @@ echo htmlspecialchars($bigsheep);
 Jedi(设$data->a的值为字符串’1234’):
 ```shell
 "{a}
-:let a = ‘4321’
-		"{a}
+:let a = '4321'
+	"{a}
 "{a}
 ```
 
