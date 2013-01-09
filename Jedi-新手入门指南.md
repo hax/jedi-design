@@ -11,9 +11,11 @@
 第一步：搭建haojing环境。
 
 第二步：在htdocs/pages/  文件夹下新建jediTest.php：
-'<?php
+```shell
+<?php
 echo (new Template('jediTest'))->render();
-?>'
+?>
+```
 
 第三步：在htdocs/view/  文件夹下新建jediTest.jedi：
 '‘hello world'
