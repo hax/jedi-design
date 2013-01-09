@@ -424,7 +424,7 @@ Jedi：
 （3）‘$’会作为额外符号加入PHP变量名中  
 Jedi：
 ```shell
-“{$variableName}
+"{$variableName}
 ```
 
 对应的PHP：
