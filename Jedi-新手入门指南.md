@@ -6,10 +6,12 @@
     - [3 注入与注释](#a1-3)
     - [4 静态方法与外部方法](#a1-4)
 - [第二章  home、listsing与viewAd](#a2)
-    - []
-    - []
-    - []
-- [第三章 ]
+    - [0 成员方法、成员变量与表达式](#a2-0)
+    - [1 模板继承](#a2-1)
+    - [2 闭包](#a2-2)
+- [第三章 坑与展望]($a3)  
+
+<a name="a1"/>
 # 第一章 新手入门
 
 必备技能：HTML，java script， PHP。
@@ -18,6 +20,7 @@
 
 本指南系入门教程，不会覆盖过多细节。
 
+<a name="a1-0"/>
 ## 0. 搭建环境
 
 第一步：搭建haojing环境。
@@ -36,6 +39,7 @@ echo (new Template('jediTest'))->render();
 
 第四步：打开www.yourname.baixing.cn/p/jediTest.php，出现hello world，环境搭建成功！
 
+<a name="a1-1"/>
 ## 1. HTML页面
 
 ### 一、标签
@@ -158,6 +162,7 @@ div
 </div>
 ```
 
+<a name="a1-2"/>
 ## 2. 页面逻辑
 
 ### 一、循环：
@@ -268,6 +273,7 @@ Jedi(设$data->a的值为字符串’1234’):
 1234
 ```
 
+<a name="a1-3"/>
 ## 3. 注入与注释
 
 ### 一、注入
@@ -339,7 +345,8 @@ Jedi:
 ?>
 ```
 
-### 4. 外部方法与静态方法
+<a name="a1-4"/>
+## 4. 外部方法与静态方法
 
 (1)引用php函数  
 Jedi:
@@ -379,6 +386,7 @@ if (Category::exist($data->categoryName)) {
 
 使用external声明，进而引用外部方法、静态方法，可以有效避免注入，保护JJ。
 
+<a name="a2"/>
 # 第二章 home、listing与viewAd
 
 本章着重介绍三大页面中涉及的Jedi使用方法。
@@ -387,6 +395,7 @@ if (Category::exist($data->categoryName)) {
 
 本教程系入门教程，不会涉及过多细节。
 
+<a name="a2-0"/>
 ## 0. 变量、方法与表达式
 
 ### 一、成员变量与成员方法
@@ -447,6 +456,7 @@ Jedi:
 <?= $data->a > $data->b ? 'good' : 'bad' ?>
 ```
 
+<a name="a2-1"/>
 ## 1. 模板继承
 
 layout.jedi:
@@ -495,6 +505,7 @@ body
 
 Layout.jedi包涵基本的header、footer等。
 
+<a name="a2-2"/>
 ## 2.闭包
 
 （1）Jedi中的闭包类似于一个PHP函数，使用方法如下：  
@@ -526,6 +537,7 @@ time.friendly =  ['12345', '54321']
 54321
 ```
 
+<a name="a3"/>
 # 第三章 坑与展望
 
 明天下午hax召集的会议会讨论清楚这部分内容。
