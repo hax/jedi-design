@@ -73,10 +73,10 @@ Jedi:
 12345^&*(
 ```
 
-(2)以双引号开头时，可以使用{}插入PHP变量：  
+(2)以双引号开头时，可以使用'{}'插入PHP变量：  
 Jedi：
 ```shell
-“ {Bigsheep}
+"{Bigsheep}
 ```
 
 对应的PHP:
@@ -103,7 +103,7 @@ Jedi:
 Jedi：
 ```shell
 div
-	‘12345
+	'12345
 ```
 
 对应的HTML：
@@ -116,7 +116,7 @@ div
 Jedi:
 ```shell
 div
-‘12345
+'12345
 ```
 
 对应的HTML：
@@ -229,7 +229,7 @@ if ($data->a > $data->b) {
 Jedi：
 ```shell
 :let bigsheep = ‘杨敏达’
-		“{bigsheep}
+		"{bigsheep}
 ```
 
 对应的PHP：
@@ -243,10 +243,10 @@ echo htmlspecialchars($bigsheep);
 （2）使用:let赋值时，只对当前block生效  
 Jedi(设$data->a的值为字符串’1234’):
 ```shell
-“{a}
+"{a}
 :let a = ‘4321’
-		“{a}
-“{a}
+		"{a}
+"{a}
 ```
 
 最后输出到页面上的结果：
@@ -277,15 +277,15 @@ Jedi：
 ```shell
 script
 	!
-		_defer.push(‘/follow.js');
-		alert(‘bigsheep’);
+		_defer.push('/follow.js');
+		alert('bigsheep');
 ```
 
 对应的HTML：
 ```shell
 <script>
-	_defer.push(‘/follow.js');
-	alert(‘bigsheep’);
+	_defer.push('/follow.js');
+	alert('bigsheep');
 </script>
 ```
 
@@ -392,7 +392,7 @@ Jedi：
 （2）成员方法  
 Jedi：
 ```shell
-“{ad.getPrice(adId)}
+"{ad.getPrice(adId)}
 ```
 
 对应的PHP:
@@ -416,7 +416,7 @@ Jedi：
 （1）Jedi中表达式的 运算符 与 优先级 同PHP  
 Jedi：
 ```shell
-“{(a + b) * !c}
+"{(a + b) * !c}
 ```
 
 对应的PHP:
@@ -427,12 +427,12 @@ Jedi：
 （2）使用’  if   then else ’ 表示 ‘?   :  ‘   
 Jedi:
 ```shell
-“{if  a > b then ‘good’ else ‘bad’}
+"{if  a > b then 'good' else 'bad'}
 ```
 
 对应的PHP：
 ```shell
-<?= $data->a > $data->b ? ‘good’ : ‘bad’ ?>
+<?= $data->a > $data->b ? 'good' : 'bad' ?>
 ```
 
 ## 1. 模板继承
@@ -488,9 +488,9 @@ Layout.jedi包涵基本的header、footer等。
 （1）Jedi中的闭包类似于一个PHP函数，使用方法如下：  
 Jedi：
 ```shell
-:: time.friendly ()           	定义一个名称为time.friendly的闭包
-		“{*}			 *代表从外部传入的参数
-time.friendly =  ‘12345’ 	引用闭包，参数为‘12345’
+:: time.friendly ()           	( 定义一个名称为time.friendly的闭包 )
+		"{*}	        ( *代表从外部传入的参数 )
+time.friendly =  '12345' 	( 引用闭包，参数为‘12345’ )
 ```
 
 
@@ -503,9 +503,9 @@ time.friendly =  ‘12345’ 	引用闭包，参数为‘12345’
 Jedi：
 ```shell
 :: time.friendly ()           	
-		“{*[0]}
-		“{*[1]}	
-time.friendly =  [‘12345’, ‘54321’]
+		"{*[0]}
+		"{*[1]}	
+time.friendly =  ['12345', '54321']
 ```
 
 输出到页面上的结果：
