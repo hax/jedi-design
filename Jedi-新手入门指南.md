@@ -27,7 +27,7 @@ echo (new Template('jediTest'))->render();
 ## 1. HTML页面
 
 ### 一、标签
-(1)jedi中，直接写一个单独的单词即代表一个HTML标签。
+(1)jedi中，直接写一个单独的单词即代表一个HTML标签。  
 Jedi:
 ```shell
 div
@@ -38,7 +38,7 @@ div
 <div></div>
 ```
 
-(2)标签的属性写在‘@’后面。
+(2)标签的属性写在‘@’后面。  
 Jedi:
 ```shell
 div @name=“BigSheep” @nick=“大绵羊”
