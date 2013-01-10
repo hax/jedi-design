@@ -9,7 +9,6 @@
     - [0 成员方法、成员变量与表达式](#a2-0)
     - [1 模板继承](#a2-1)
     - [2 闭包](#a2-2)
-- [第三章 坑与展望](#a3)  
 
 <a name="a1"/>
 # 第一章 新手入门
@@ -98,7 +97,7 @@ Jedi：
 对应的PHP:
 ```shell
 <?php
-echo htmlspecialchars($data->bigsheep);
+echo htmlspecialchars($data->bigsheep);             (view中的数据都默认作为$data的属性出现)
 ?>
 ```
 
@@ -203,7 +202,7 @@ foreach ($data->sheeps as $key => $value)  {
 (1)裸if  
 Jedi:
 ```shell
-:if a > b
+ :if a > b
 	'bigsheep
 ```
 
@@ -538,8 +537,3 @@ time.friendly =  ['12345', '54321']
 ```
 
 <a name="a3"/>
-# 第三章 坑与展望
-
-明天下午hax召集的会议会讨论清楚这部分内容。
-
-这里先不赘述。
