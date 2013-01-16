@@ -75,24 +75,24 @@ td > div.linkstd
 注意：‘>‘后面只能跟子标签。
 
 (7)标签后面直接跟随文本：
-```
+```jade
 div.text '12345
 ```
 
 会被解析为：
-```
+```html
 <div class="text">12345</div>
 ```
 
 (8)标签的属性：
 
-```
+```jade
 a @href="www.baixing.com"
 	'button
 ```
 
 会被解析为：
-```
+```html
 <a href="www.baixing.com">
 	button
 </a>
@@ -101,20 +101,20 @@ a @href="www.baixing.com"
 <a name="a6-3"/>
 
 (9)标签的属性可以插入表达式，插入表达式时要使用双引号。
-```
+```jade
 a @href="{url}"
 	'button
 ```
 
 会被解析为：
-```
+```php
 <a href="<?= $data->url ?>">
 	button
 </a>
 ```
 
 (8)标签的属性可以后置到它下一级子block的任何位置：
-```
+```jade
 div
 	@name1="example"
 	'12345
@@ -122,7 +122,7 @@ div
 ```
 
 会被解析为：
-```
+```html
 <div name1="example" name2="text">
 	12345
 </div>
