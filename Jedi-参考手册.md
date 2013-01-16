@@ -238,19 +238,24 @@ p 'bar
 <p>bar</p>
 ```
 
-(2)使用字符 '-' 可以简单的注释掉整个block：
-
-```jade
-//- will not output within markup
-p foo
-p bar
+(2)使用字符 '--' 可以简单的注释掉整个block：
+```
+--div.test
+	'example
+	span
+		'12345
 ```
 
-outputting
-
-```html
-<p>foo</p>
-<p>bar</p>
+会被解析为:
+```
+<?php
+/*
+ *div.test
+ *	'example
+ *	span
+ *		'12345
+ */
+?>
 ```
 
 <a name="a6-5"/>
