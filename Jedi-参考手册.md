@@ -14,17 +14,17 @@ html
 ```
 
 会被解析为：
-```
+```html
 <html></html>
 ```
 
 (2)包涵ID的标签:
-```
+```jade
 div#container
 ```
 
 会被解析为：
-```
+```html
 <div id="container"></div>
 ```
 
