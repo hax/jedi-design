@@ -1,16 +1,14 @@
-# 语法
+## 语法
 
 <a name="a6-1"/>
-## 换行符
+### 换行符
 
 **CRLF** 和 **CR** 会被统一解析为 **LF**。
 
 <a name="a6-2"/>
-## 标签
+### 标签
 
-###基本标签
-
-一个单独的单词就是一个标签: 
+(1)一个单独的单词就是一个标签: 
 ```
 html
 ```
@@ -20,7 +18,7 @@ html
 <html></html>
 ```
 
-包涵ID的标签:
+(2)包涵ID的标签:
 ```
 div#container
 ```
@@ -30,7 +28,7 @@ div#container
 <div id="container"></div>
 ```
 
-包涵class的标签
+(3)包涵class的标签：
 ```
 div.user-details
 ```
@@ -40,7 +38,7 @@ div.user-details
 <div class="user-details"></div>
 ```
 
-同时包含class和id:
+(4)同时包含class和id:
 ```
 div.bar.baz#foo
 ```
@@ -50,154 +48,197 @@ div.bar.baz#foo
 <div id="foo" class="bar baz"></div>
 ```
 
-注意：class（.xxx）必须写在id（#xxx）的前面，class可以有多个，id只能有一个。
+注意： 
+class（.xxx）必须写在id（#xxx）的前面，class可以有多个，id只能有一个。 
+不能在这里插值。
+
+(5)标签后面直接跟‘=’,可以直接输出一个表达式：
+```
+span = 12345 + 54321
+``` 
+
+会被解析为：
+```
+<span>66666</span>
+```
+
+(6)在同一行写子标签
+```
+td > div.linkstd
+```
+
+会被解析为：
+```
+<td><div class="linkstd"></div></td>
+```
+
+注意：‘>‘后面只能跟子标签。
+
+(7)标签后面直接跟随文本：
+```
+div.text '12345
+```
+
+会被解析为：
+```
+<div class="text">12345</div>
+```
+
+(8)标签的属性：
+
+```
+a @href="www.baixing.com"
+	'button
+```
+
+会被解析为：
+```
+<a href="www.baixing.com">
+	button
+</a>
+```
 
 <a name="a6-3"/>
-### Tag Text
 
-Simply place some content after the tag:
-
-```jade
-p wahoo!
+(9)标签的属性可以插入表达式，插入表达式时要使用双引号。
+```
+a @href="{url}"
+	'button
 ```
 
-renders `<p>wahoo!</p>`.
-
-well cool, but how about large bodies of text:
-
-```jade
-p
-  | foo bar baz
-  | rawr rawr
-  | super cool
-  | go jade go
+会被解析为：
+```
+<a href="<?= $data->url ?>">
+	button
+</a>
 ```
 
-renders `<p>foo bar baz rawr.....</p>`
-
-interpolation? yup! both types of text can utilize interpolation,
-if we passed `{ name: 'tj', email: 'tj@vision-media.ca' }` to the compiled function we can do the following:
-
-```jade
-#user #{name} &lt;#{email}&gt;
+(8)标签的属性可以后置到它下一级子block的任何位置：
+```
+div
+	@name1="example"
+	'12345
+	@name2="text"
 ```
 
-outputs `<div id="user">tj &lt;tj@vision-media.ca&gt;</div>`
-
-Actually want `#{}` for some reason? escape it!
-
-```jade
-p \#{something}
+会被解析为：
+```
+<div name1="example" name2="text">
+	12345
+</div>
 ```
 
-now we have `<p>#{something}</p>`
+### 文本
 
-We can also utilize the unescaped variant `!{html}`, so the following
-will result in a literal script tag:
+写在单引号 ' 和双引号 " 后面的内容会作为文本输出：
 
-```jade
-- var html = "<script></script>"
-| !{html}
+```
+'hello!
+"world!
 ```
 
-Nested tags that also contain text can optionally use a text block:
-
-```jade
-label
-  | Username:
-  input(name='user[name]')
+会被解析为：
+```
+hello!world!
 ```
 
-or immediate tag text:
-
-```jade
-label Username:
-  input(name='user[name]')
+(2)大段文本可以写在子block中：
+```
+'
+	| foo bar baz
+	| rawr rawr
+	| super cool
+	| go jade go
 ```
 
-Tags that accept _only_ text such as `script` and `style` do not
-need the leading `|` character, for example:
-
-```jade
-html
-  head
-    title Example
-    script
-      if (foo) {
-        bar();
-      } else {
-        baz();
-      }
+会被解析为
+```
+| foo bar baz | rawr rawr | super cool | go jade go
 ```
 
-Once again as an alternative, we may use a trailing `.` to indicate a text block, for example:
-
-```jade
-p.
-  foo asdf
-  asdf
-   asdfasdfaf
-   asdf
-  asd.
+(3)一个单独的'代表一个空格：
+```
+'
+'hello
 ```
 
-outputs:
-
-```html
-<p>foo asdf
-asdf
-  asdfasdfaf
-  asdf
-asd.
-</p>
+会被解析为：
+```
+ hello
 ```
 
-This however differs from a trailing `.` followed by a space, which although is ignored by the Jade parser, tells Jade that this period is a literal:
-
-```jade
-p .
+(4)文本开头处的空格会被忽略
+```
+'           hello
+'           world
 ```
 
-outputs:
-
-```html
-<p>.</p>
+会被解析为：
+```
+hello world
 ```
 
-It should be noted that text blocks should be doubled escaped.  For example if you desire the following output.
-
-```html
-<p>foo\bar</p>
+(5)单引号开头的文本写在同一行时，可以在末尾加引号 ' ，末尾的引号 ' 不会被输出。
+```
+'hello world'
 ```
 
-use:
+会被解析为：
+```
+hello world
+```
 
-```jade
-p.
-  foo\\bar
+(6)以双引号开头的文本可以插入表达式
+```
+"12345 {text}
+```
+
+会被解析为：
+```
+12345 <?= htmlspecialchars($data->text) ?>
+```
+
+(7)需要输出 `{}`时，可以用‘\’escape掉它。
+
+```
+"12345 \{something}
+```
+
+会被解析为：
+```
+12345 {something}
+```
+
+(8)不希望把变量的内容escape掉时，可以使用':unsafe'关键字，强制输出变量：
+```
+:unsafe adsenseScript
+```
+
+会被解析为：
+```
+<?= adsenseScript ?>
 ```
 
 <a name="a6-4"/>
-### Comments
+### 注释
 
-Single line comments currently look the same as JavaScript comments,
-aka `//` and must be placed on their own line:
-
-```jade
+(1)使用'//'可以注释掉一行代码，但是'//'必须写在行首。
+```
 // just some paragraphs
-p foo
-p bar
+p 'foo
+p 'bar
 ```
 
-would output
-
-```html
-<!-- just some paragraphs -->
+会被解析为：
+```
+<?php
+// just some paragraphs
+?>
 <p>foo</p>
 <p>bar</p>
 ```
 
-Jade also supports unbuffered comments, by simply adding a hyphen:
+(2)使用字符 '-' 可以简单的注释掉整个block：
 
 ```jade
 //- will not output within markup
