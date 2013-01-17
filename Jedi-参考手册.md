@@ -1,12 +1,33 @@
-## 语法
+# 目录
+- [语法](#a1)
+    - [换行符](#a1-0)
+    - [标签](#a1-1)
+    - [文本](#a1-2)
+    - [注释](#a1-3)
+    - [关键字](#a1-4)
+        - [循环](#a1-4-0)
+        - [条件判断](#a1-4-1)
+        - [赋值](#a1-4-2)
+        - [其他](#a1-4-3)
+    - [注入](#a1-5)
+    - [模板继承](#a1-6)
+    - [闭包](#a1-7)
+    - [外部函数与静态方法](#a1-8)
 
-<a name="a6-1"/>
-### 换行符
+- [词法](#a2)
+    - [变量](#a2-0)
+    - [表达式](#a2-1)
+
+<a name="a1"/>
+# 语法
+
+<a name="a1-0"/>
+## 换行符
 
 **CRLF(\r\n)** 和 **CR(\r)** 会被统一解析为 **LF(\n)**。
 
-<a name="a6-2"/>
-### 标签
+<a name="a1-1"/>
+## 标签
 
 (1)一个单独的单词就是一个标签: 
 ```jade
@@ -52,7 +73,7 @@ div.bar.baz#foo
 class（.xxx）必须写在id（#xxx）的前面，class可以有多个，id只能有一个。 
 不能在这里插值。
 
-(5)标签后面直接跟‘=’,可以直接输出一个表达式：
+(5)标签后面直接跟‘=’,可以直接输出一个[表达式](#a2-1)：
 ```jade
 span = 12345 + 54321
 ```
@@ -127,8 +148,8 @@ div
 	12345
 </div>
 ```
-
-### 文本
+<a name="a1-2"/>
+## 文本
 
 写在单引号 ' 和双引号 " 后面的内容会作为文本输出：
 
@@ -198,7 +219,7 @@ hello world
 12345 <?= htmlspecialchars($data->text) ?>
 ```
 
-(7)需要输出 `{}`时，可以用‘\’escape掉它。
+(7)需要输出 `{}`时，可以用‘\’转义掉它。
 
 ```
 "12345 \{something}
@@ -209,7 +230,7 @@ hello world
 12345 {something}
 ```
 
-(8)不希望把变量的内容escape掉时，可以使用':unsafe'关键字，强制输出变量：
+(8)不希望把变量的内容转义掉时，可以使用':unsafe'关键字，强制输出变量：
 ```
 :unsafe adsenseScript
 ```
@@ -219,8 +240,8 @@ hello world
 <?= adsenseScript ?>
 ```
 
-<a name="a6-4"/>
-### 注释
+<a name="a1-3"/>
+## 注释
 
 (1)使用'//'可以注释掉一行代码，但是'//'必须写在行首。
 ```
@@ -258,919 +279,401 @@ p 'bar
 ?>
 ```
 
-<a name="a6-5"/>
-### Block Comments
-
- A block comment is legal as well:
-
-```jade
-body
-  //
-    #content
-      h1 Example
+(3)用'!'可以把文本注释在HTML页面中：
+```
+!hello world
 ```
 
-outputting
-
+会被解释为：
 ```html
-<body>
-  <!--
-  <div id="content">
-    <h1>Example</h1>
-  </div>
-  -->
-</body>
+<!--hello world-->
 ```
 
-Jade supports conditional-comments as well, for example:
-
-```jade
-head
-  //if lt IE 8
-    script(src='/ie-sucks.js')
+(4)用'!'注释整段：
+```
+!
+	hello
+	world
 ```
 
-outputs:
-
-```html
-<body>
-  <!--[if lt IE 8]>
-    <script src="/ie-sucks.js"></script>
-  <![endif]-->
-</body>
+会被解释为：
+```
+<!--hello world-->
 ```
 
-<a name="a6-6"/>
-### Nesting
-
- Jade supports nesting to define the tags in a natural way:
-
-```jade
-ul
-  li.first
-    a(href='#') foo
-  li
-    a(href='#') bar
-  li.last
-    a(href='#') baz
+(5)JS代码可以用'!'来写。
+```
+script
+	!
+		_defer.push('/follow.js');
+		alert('bigsheep');
 ```
 
-<a name="a6-7"/>
-### Block Expansion
-
- Block expansion allows you to create terse single-line nested tags,
- the following example is equivalent to the nesting example above.
-
-```jade
-ul
-  li.first: a(href='#') foo
-  li: a(href='#') bar
-  li.last: a(href='#') baz
+会被解释为：
+```
+<script>
+	_defer.push('/follow.js');
+	alert('bigsheep');
+</script>
 ```
 
-<a name="a6-8"/>
-### Case
+注意：使用'!'写JS代码时，JS中不能插入表达式。
 
- The case statement takes the following form:
-
-```jade
-html
-  body
-    friends = 10
-    case friends
-      when 0
-        p you have no friends
-      when 1
-        p you have a friend
-      default
-        p you have #{friends} friends
+(6)若要在JS中插入表达式，可以用双引号 " 定义好变量，然后在后面使用。
+```
+script
+	"
+		var categoryEnglishName = '{category.id}';
+	!
+		alert(categoryEnglishName);
 ```
 
- Block expansion may also be used:
-
-```jade
-friends = 5
-
-html
-  body
-    case friends
-      when 0: p you have no friends
-      when 1: p you have a friend
-      default: p you have #{friends} friends
+会被解释为：
+```
+<script>
+	var categoryEnglishName = '<?= category.id ?>';
+	alert(categoryEnglishName);
+</script>
 ```
 
-<a name="a6-9"/>
-### Attributes
-
-Jade currently supports `(` and `)` as attribute delimiters.
-
-```jade
-a(href='/login', title='View login page') Login
+<a name="a1-4"/>
+## 关键字
+<a name="a1-4-0"/>
+### 循环
+(1)':for' 关键字  
+```
+:for ad in ads
+	"{ad}
 ```
 
-When a value is `undefined` or `null` the attribute is _not_ added,
-so this is fine, it will not compile `something="null"`.
-
-```jade
-div(something=null)
+会被解析为：
+```shell
+<?php
+foreach ($data->ads as $ad)  { 
+	echo htmlspecialchars($ad);
+}
+?>
 ```
 
-Boolean attributes are also supported:
-
-```jade
-input(type="checkbox", checked)
+(2)key，value形式  
+```
+:for (key, ad) in ads
+	"{key} {ad}
 ```
 
-Boolean attributes with code will only output the attribute when `true`:
-
-```jade
-input(type="checkbox", checked=someValue)
+会被解析为：
+```shell
+<?php
+foreach ($data->ads as $key => $ad)  { 
+	echo htmlspecialchars($key), htmlspecialchars(' '), htmlspecialchars($ad);
+}
+?>
 ```
 
-Multiple lines work too:
-
-```jade
-input(type='checkbox',
-  name='agreement',
-  checked)
+(3)多重嵌套的foreach循环：
+```
+:for x in list1, y in list2
+	"{x}, {y}
 ```
 
-Multiple lines without the comma work fine:
-
-```jade
-input(type='checkbox'
-  name='agreement'
-  checked)
+会被解析为：
+```
+foreach ($data->list1 as $x) {
+	foreach ($data->list2 as $y) {
+		echo htmlspecialchars($x), htmlspecialchars(', '), htmlspecialchars($y);
+	}
+}
 ```
 
-Funky whitespace? fine:
-
-```jade
-input(
-  type='checkbox'
-  name='agreement'
-  checked)
+(4)循环控制变量可以写任何表达式：
+```
+:for x in [0..3]
+	"{x}
 ```
 
-Colons work:
+会被解析为：
+```
+foreach ([0..3] as $x) {
+	echo htmlspecialchars($x);
+}
+```
+<a name="a1-4-1"/>
+### 条件判断
 
-```jade
-rss(xmlns:atom="atom")
+(1):if 关键字
+```shell
+:if a > b
+	'hello
 ```
 
-Suppose we have the `user` local `{ id: 12, name: 'tobi' }`
-and we wish to create an anchor tag with `href` pointing to "/user/12"
-we could use regular javascript concatenation:
-
-```jade
-a(href='/user/' + user.id)= user.name
+会被解析为:
+```shell
+ <?php
+if ($data->a > $data->b) {
+	echo 'hello';
+}
+?>
 ```
 
-or we could use jade's interpolation, which I added because everyone
-using Ruby or CoffeeScript seems to think this is legal js..:
-
-```jade
-a(href='/user/#{user.id}')= user.name
+(2):else 与 :else if 关键字： 
+```shell
+:if a > b
+	'hello
+:else if a < b
+	'world
+:else
+	'earth
 ```
 
-The `class` attribute is special-cased when an array is given,
-allowing you to pass an array such as `bodyClasses = ['user', 'authenticated']` directly:
-
-```jade
-body(class=bodyClasses)
+会被解析为:
+```shell
+<?php
+if ($data->a > $data->b) {
+	echo 'hello';
+} elseif ($data->a < $data->b) {
+	echo 'world';
+} else {
+	echo 'earth';
+}
+?>
 ```
 
-<a name="a6-10"/>
-### HTML
+<a name="a1-4-2"/>
+### 赋值
 
- Inline html is fine, we can use the pipe syntax to
- write arbitrary text, in this case some html:
-
-```jade
-html
-  body
-    | <h1>Title</h1>
-    | <p>foo bar baz</p>
+（1）:let关键字
+```shell
+:let x = 'hello world'
+	"{x}
 ```
 
- Or we can use the trailing `.` to indicate to Jade that we
- only want text in this block, allowing us to omit the pipes:
-
-```jade
-html
-  body.
-    <h1>Title</h1>
-    <p>foo bar baz</p>
+会被解析为：
+```shell
+<?php
+call_user_func(function($x) {
+	echo htmlspecialchars($x);
+}, 'hello world');
+?>
 ```
 
- Both of these examples yield the same result:
-
-```html
-<html><body><h1>Title</h1>
-<p>foo bar baz</p>
-</body></html>
+(2)使用:let赋值时，被赋值的变量只在它的子block中有效：
+```shell
+”{x}
+:let x = 'hello world'
+	"{x}
+"{x}
 ```
 
- The same rule applies for anywhere you can have text
- in jade, raw html is fine:
-
-```jade
-html
-  body
-    h1 User <em>#{name}</em>
+会被解析为：
+```shell
+echo htmlspecialchars($data->x);
+<?php
+call_user_func(function($x) {
+	echo htmlspecialchars($x);
+}, 'hello world');
+?>
+echo htmlspecialchars($data->x);
 ```
 
-<a name="a6-11"/>
-### Doctypes
+<a name="a1-4-3"/>
+### 其他关键字：
+:unsafe
+:import
+:external
 
-To add a doctype simply use `!!!`, or `doctype` followed by an optional value:
-
-```jade
-!!!
+<a name="a1-5"/>
+## 注入
+(1)使用字符 '-' 可以向页面中注入PHP代码。  
+```shell
+-$varb = 'bigsheep';
 ```
 
-or
-
-```jade
-doctype
+会被解析为:
+```shell
+<?php
+$varb = 'bigsheep';
+?>
 ```
 
-Will output the _html 5_  doctype, however:
-
-```jade
-!!! transitional
+(2)行末的';'可以省略，Jedi会自动添加分号。
+```shell
+-$varb = 'bigsheep'
 ```
 
-Will output the _transitional_ doctype.
-
-Doctypes are case-insensitive, so the following are equivalent:
-
-```jade
-doctype Basic
-doctype basic
+会被解析为:
+```shell
+<?php
+$varb = 'bigsheep';
+?>
 ```
 
-it's also possible to simply pass a doctype literal:
-
-```jade
-doctype html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN
+(3)注入时注意末尾的';'，Jedi的自动添加可能会带来Bug。
+```shell
+-for ($i = 0; $i < 10; $i++) {
+-$varb = 'bigsheep';
+-}
 ```
 
-yielding:
-
-```html
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN>
-```
-
-Below are the doctypes defined by default, which can easily be extended:
-
-```js
-var doctypes = exports.doctypes = {
-  '5': '<!DOCTYPE html>',
-  'default': '<!DOCTYPE html>',
-  'xml': '<?xml version="1.0" encoding="utf-8" ?>',
-  'transitional': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
-  'strict': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">',
-  'frameset': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">',
-  '1.1': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">',
-  'basic': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN" "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">',
-  'mobile': '<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.2//EN" "http://www.openmobilealliance.org/tech/DTD/xhtml-mobile12.dtd">'
+会被解析为:
+```shell
+<?php
+for ($i = 0; $i < 10; $i++) {;
+$varb = 'bigsheep';
 };
+?>
 ```
 
-To alter the default simply change:
-
-```js
-jade.doctypes.default = 'whatever you want';
+(4)'-'只会影响本行内容，它的子block会继续按照Jedi语法解析，并会自动添加大括号'{  }'。
+```
+-if ($data->x == 'hello world')
+	"{x}
 ```
 
-<a name="a7"/>
-## Filters
+会被解析为：
+```
+if ($data->x == 'hello world')
+{
+	echo htmlspecialchars(($data->x));
+}
+```
 
-Filters are prefixed with `:`, for example `:markdown` and
-pass the following block of text to an arbitrary function for processing. View the _features_
-at the top of this document for available filters.
+<a name="a1-6"/>
+## 模板继承
+Jedi支持简单的模板继承。首先我们建立一个模板  layout.jedi:
+```shell
+//layout.jedi是一个模板
+head
+	'我是head
+#body
+	// '#'代表在body标签上建立了钩子
+	'我是body
+```
+然后使用:import关键字引用这个模板。
+Bigsheep.jedi:
+```shell
+:Import  layout
+	#body::brfore
+		//Bigsheep.jedi引用了模板layout.jedi
+		//在body的内容前增加内容
+		'我是Bigsheep
+	#body			
+		//替换body的内容
+		'我也是Bigsheep
+	#body::after		
+		//在body的内容后增加内容
+		'我还是Bigsheep
+```
 
-```jade
+上面的Bigsheep.jedi会被翻译为
+```shell
+//layout.jedi是一个模板
+head
+	'我是head
 body
-  :markdown
-    Woah! jade _and_ markdown, very **cool**
-    we can even link to [stuff](http://google.com)
+	//Bigsheep.jedi引用了模板layout.jedi
+	//在body的内容前增加内容
+	'我是Bigsheep
+	//替换body的内容
+	'我也是Bigsheep
+	//在body的内容后增加内容
+	'我还是Bigsheep
+```
+注意：目前Jedi的模板只能继承一层，不支持诸如：B继承A，C再继承B。但Jedi支持继承多个模板。
+
+<a name="a1-7"/>
+## 闭包
+(1)Jedi中的闭包类似于定义一个PHP函数  
+```shell
+:: time.friendly ()
+	'12345
+time.friendly = ''
 ```
 
-Renders:
-
-```html
-<body><p>Woah! jade <em>and</em> markdown, very <strong>cool</strong> we can even link to <a href="http://google.com">stuff</a></p></body>
+会被解析为：
+```
+<?php
+call_user_func(function ($context) {
+	echo '<time class="friendly">';
+	echo '12345';
+	echo '</time>';
+}, '');
+?>
 ```
 
-<a name="a8"/>
-## Code
-
-Jade currently supports three classifications of executable code. The first
-is prefixed by `-`, and is not buffered:
-
-```jade
-- var foo = 'bar';
+(2)引用闭包时，可以传参数进去。闭包中通过星号 '*' 使用参数。
+```shell
+:: time.friendly ()
+	"{*}
+time.friendly =  '12345'
 ```
 
-This can be used for conditionals, or iteration:
 
-```jade
-- for (var key in obj)
-  p= obj[key]
+会被解析为：
+```shell
+<?php call_user_func(function ($context) { ?>
+	echo '<time class="friendly">';
+	echo htmlspecialchars($context);
+	echo '</time>';
+<?php }, '12345');?>
 ```
 
-Due to Jade's buffering techniques the following is valid as well:
-
-```jade
-- if (foo)
-  ul
-    li yay
-    li foo
-    li worked
-- else
-  p oh no! didnt work
+(3)闭包中的参数可以是简单类型的变量，也可以是一个数组或者一个实例。
+```shell
+:: time.friendly ()
+	"{*[0]}
+	"{*[1]}
+time.friendly =  ['12345', '23456']
 ```
 
-Hell, even verbose iteration:
-
-```jade
-- if (items.length)
-  ul
-    - items.forEach(function(item){
-      li= item
-    - })
+会被解析为：
+```shell
+<?php call_user_func(function ($context) { ?>
+	echo '<time class="friendly">';
+	echo htmlspecialchars($context[0]);
+	echo htmlspecialchars($context[1]);
+	echo '</time>';
+<?php }, ['12345', '23456']);?>
 ```
 
-Anything you want!
+<a name="a1-8"/>
+## 外部函数与静态方法
 
-Next up we have _escaped_ buffered code, which is used to
-buffer a return value, which is prefixed by `=`:
-
-```jade
-- var foo = 'bar'
-= foo
-h1= foo
+(1)使用php函数  
+```shell
+:external is_array
+:if is_array(a)
+	'Bigsheep
 ```
 
-Which outputs `bar<h1>bar</h1>`. Code buffered by `=` is escaped
-by default for security, however to output unescaped return values
-you may use `!=`:
-
-```jade
-p!= aVarContainingMoreHTML
-```
-
- Jade also has designer-friendly variants, making the literal JavaScript
- more expressive and declarative. For example the following assignments
- are equivalent, and the expression is still regular javascript:
-
-```jade
-- var foo = 'foo ' + 'bar'
-foo = 'foo ' + 'bar'
-```
-
-  Likewise Jade has first-class `if`, `else if`, `else`, `until`, `while`, `unless` among others, however you must remember that the expressions are still regular javascript:
-
-```jade
-if foo == 'bar'
-  ul
-    li yay
-    li foo
-    li worked
-else
-  p oh no! didnt work
-```
-
-<a name="a9"/>
-## Iteration
-
- Along with vanilla JavaScript Jade also supports a subset of
- constructs that allow you to create more designer-friendly templates,
- one of these constructs is `each`, taking the form:
-
-```jade
-each VAL[, KEY] in OBJ
-```
-
-An example iterating over an array:
-
-```jade
-- var items = ["one", "two", "three"]
-each item in items
-  li= item
-```
-
-outputs:
-
-```html
-<li>one</li>
-<li>two</li>
-<li>three</li>
-```
-
-iterating an array with index:
-
-```jade
-items = ["one", "two", "three"]
-each item, i in items
-  li #{item}: #{i}
-```
-
-outputs:
-
-```html
-<li>one: 0</li>
-<li>two: 1</li>
-<li>three: 2</li>
-```
-
-iterating an object's keys and values:
-
-```jade
-obj = { foo: 'bar' }
-each val, key in obj
-  li #{key}: #{val}
-```
-
-would output `<li>foo: bar</li>`
-
-Internally Jade converts these statements to regular
-JavaScript loops such as `users.forEach(function(user){`,
-so lexical scope and nesting applies as it would with regular
-JavaScript:
-
-```jade
-each user in users
-  each role in user.roles
-    li= role
-```
-
- You may also use `for` if you prefer:
-
-```jade
-for user in users
-  for role in user.roles
-    li= role
-```
-
-<a name="a10"/>
-## Conditionals
-
- Jade conditionals are equivalent to those using the code (`-`) prefix,
- however allow you to ditch parenthesis to become more designer friendly,
- however keep in mind the expression given is _regular_ JavaScript:
-
-```jade
-for user in users
-  if user.role == 'admin'
-    p #{user.name} is an admin
-  else
-    p= user.name
-```
-
- is equivalent to the following using vanilla JavaScript literals:
-
-```jade
-for user in users
-  - if (user.role == 'admin')
-    p #{user.name} is an admin
-  - else
-    p= user.name
-```
-
-  Jade also provides `unless` which is equivalent to `if (!(expr))`:
-
-```jade
-for user in users
-  unless user.isAnonymous
-    p
-      | Click to view
-      a(href='/users/' + user.id)= user.name
-```
-
-<a name="a11"/>
-## Template inheritance
-
-  Jade supports template inheritance via the `block` and `extends` keywords. A block is simply a "block" of Jade that may be replaced within a child template, this process is recursive. To activate template inheritance in Express 2.x you must add: `app.set('view options', { layout: false });`.
-
-  Jade blocks can provide default content if desired, however optional as shown below by `block scripts`, `block content`, and `block foot`.
-
-```jade
-html
-  head
-    h1 My Site - #{title}
-    block scripts
-      script(src='/jquery.js')
-  body
-    block content
-    block foot
-      #footer
-        p some footer content
-```
-
-  Now to extend the layout, simply create a new file and use the `extends` directive as shown below, giving the path (with or without the .jade extension). You may now define one or more blocks that will override the parent block content, note that here the `foot` block is _not_ redefined and will output "some footer content".
-
-```jade
-extends layout
-
-block scripts
-  script(src='/jquery.js')
-  script(src='/pets.js')
-
-block content
-  h1= title
-  each pet in pets
-    include pet
-```
-
-  It's also possible to override a block to provide additional blocks, as shown in the following example where `content` now exposes a `sidebar` and `primary` block for overriding, or the child template could override `content` all together.
-
-```jade
-extends regular-layout
-
-block content
-  .sidebar
-    block sidebar
-      p nothing
-  .primary
-    block primary
-      p nothing
-```
-
-<a name="a12"/>
-## Block append / prepend
-
- Jade allows you to _replace_ (default), _prepend_, or _append_ blocks. Suppose for example you have default scripts in a "head" block that you wish to utilize on _every_ page, you might do this:
-
-```jade
-html
-  head
-    block head
-      script(src='/vendor/jquery.js')
-      script(src='/vendor/caustic.js')
-    body
-      block content
-```
-
- Now suppose you have a page of your application for a JavaScript game, you want some game related scripts as well as these defaults, you can simply `append` the block:
-
-```jade
-extends layout
-
-block append head
-  script(src='/vendor/three.js')
-  script(src='/game.js')
-```
-
-  When using `block append` or `block prepend` the `block` is optional:
-
-```jade
-extends layout
-
-append head
-  script(src='/vendor/three.js')
-  script(src='/game.js')
-```
-
-<a name="a13"/>
-## Includes
-
- Includes allow you to statically include chunks of Jade,
- or other content like css, or html which lives in separate files. The classical example is including a header and footer. Suppose we have the following directory structure:
-
-    ./layout.jade
-    ./includes/
-      ./head.jade
-      ./foot.jade
-
-and the following _layout.jade_:
-
-```jade
-html
-  include includes/head
-  body
-    h1 My Site
-    p Welcome to my super amazing site.
-    include includes/foot
-```
-
-both includes _includes/head_ and _includes/foot_ are
-read relative to the `filename` option given to _layout.jade_,
-which should be an absolute path to this file, however Express does this for you. Include then parses these files, and injects the AST produced to render what you would expect:
-
-```html
-<html>
-  <head>
-    <title>My Site</title>
-    <script src="/javascripts/jquery.js">
-    </script><script src="/javascripts/app.js"></script>
-  </head>
-  <body>
-    <h1>My Site</h1>
-    <p>Welcome to my super lame site.</p>
-    <div id="footer">
-      <p>Copyright>(c) foobar</p>
-    </div>
-  </body>
-</html>
-```
-
- As mentioned `include` can be used to include other content
- such as html or css. By providing an extension Jade will not
- assume that the file is Jade source and will include it as
- a literal:
-
-```jade
-html
-  body
-    include content.html
-```
-
-  Include directives may also accept a block, in which case the
-  the given block will be appended to the _last_ block defined
-  in the file. For example if `head.jade` contains:
-
-```jade
-head
-  script(src='/jquery.js')
-```
-
- We may append values by providing a block to `include head`
- as shown below, adding the two scripts.
-
-```jade
-html
-  include head
-    script(src='/foo.js')
-    script(src='/bar.js')
-  body
-    h1 test
-```
-
- You may also `yield` within an included template, allowing you to explicitly mark where the block given to `include` will be placed. Suppose for example you wish to prepend scripts rather than append, you might do the following:
-
-```jade
-head
-  yield
-  script(src='/jquery.js')
-  script(src='/jquery.ui.js')
-```
-
- Since included Jade is parsed and literally merges the AST, lexically scoped variables function as if the included Jade was written right in the same file. This means `include` may be used as sort of partial, for example suppose we have `user.jade` which utilizes a `user` variable.
-
-```jade
-h1= user.name
-p= user.occupation
-```
-
-We could then simply `include user` while iterating users, and since the `user` variable is already defined within the loop the included template will have access to it.
-
-```jade
-users = [{ name: 'Tobi', occupation: 'Ferret' }]
-
-each user in users
-  .user
-    include user
-```
-
-yielding:
-
-```html
-<div class="user">
-  <h1>Tobi</h1>
-  <p>Ferret</p>
-</div>
-```
-
-If we wanted to expose a different variable name as `user` since `user.jade` references that name, we could simply define a new variable as shown here with `user = person`:
-
-```jade
-each person in users
-  .user
-    user = person
-    include user
-```
-
-<a name="a14"/>
-## Mixins
-
- Mixins are converted to regular JavaScript functions in
- the compiled template that Jade constructs. Mixins may
- take arguments, though not required:
-
-```jade
-mixin list
-  ul
-    li foo
-    li bar
-    li baz
-```
-
-  Utilizing a mixin without args looks similar, just without a block:
-
-```jade
-h2 Groceries
-mixin list
-```
-
-  Mixins may take one or more arguments as well, the arguments
-  are regular javascripts expressions, so for example the following:
-
-```jade
-mixin pets(pets)
-  ul.pets
-    - each pet in pets
-      li= pet
-
-mixin profile(user)
-  .user
-    h2= user.name
-    mixin pets(user.pets)
-```
-
-   Would yield something similar to the following html:
-
-```html
-<div class="user">
-  <h2>tj</h2>
-  <ul class="pets">
-    <li>tobi</li>
-    <li>loki</li>
-    <li>jane</li>
-    <li>manny</li>
-  </ul>
-</div>
-```
-
-<a name="a15"/>
-## Generated Output
-
- Suppose we have the following Jade:
-
-```jade
-- var title = 'yay'
-h1.title #{title}
-p Just an example
-```
-
- When the `compileDebug` option is not explicitly `false`, Jade
- will compile the function instrumented with `__.lineno = n;`, which
- in the event of an exception is passed to `rethrow()` which constructs
- a useful message relative to the initial Jade input.
-
-```js
-function anonymous(locals) {
-  var __ = { lineno: 1, input: "- var title = 'yay'\nh1.title #{title}\np Just an example", filename: "testing/test.js" };
-  var rethrow = jade.rethrow;
-  try {
-    var attrs = jade.attrs, escape = jade.escape;
-    var buf = [];
-    with (locals || {}) {
-      var interp;
-      __.lineno = 1;
-       var title = 'yay'
-      __.lineno = 2;
-      buf.push('<h1');
-      buf.push(attrs({ "class": ('title') }));
-      buf.push('>');
-      buf.push('' + escape((interp = title) == null ? '' : interp) + '');
-      buf.push('</h1>');
-      __.lineno = 3;
-      buf.push('<p>');
-      buf.push('Just an example');
-      buf.push('</p>');
-    }
-    return buf.join("");
-  } catch (err) {
-    rethrow(err, __.input, __.filename, __.lineno);
-  }
+会被解析为：
+```shell
+<?php
+if (is_array($data->a)) {
+	echo 'Bigsheep';
 }
+?>
 ```
 
-When the `compileDebug` option _is_ explicitly `false`, this instrumentation
-is stripped, which is very helpful for light-weight client-side templates. Combining Jade's options with the `./runtime.js` file in this repo allows you
-to toString() compiled templates and avoid running the entire Jade library on
-the client, increasing performance, and decreasing the amount of JavaScript
-required.
+(2)引用包涵静态方法的PHP类  
+Jedi:
+```shell
+:external Category
+:if Category.exist(categoryName)
+	'Bigsheep
+```
 
-```js
-function anonymous(locals) {
-  var attrs = jade.attrs, escape = jade.escape;
-  var buf = [];
-  with (locals || {}) {
-    var interp;
-    var title = 'yay'
-    buf.push('<h1');
-    buf.push(attrs({ "class": ('title') }));
-    buf.push('>');
-    buf.push('' + escape((interp = title) == null ? '' : interp) + '');
-    buf.push('</h1>');
-    buf.push('<p>');
-    buf.push('Just an example');
-    buf.push('</p>');
-  }
-  return buf.join("");
+会被解析为：
+```shell
+<?php
+if (Category::exist($data->categoryName)) {
+	echo 'Bigsheep';
 }
+?>
 ```
 
-<a name="a16"/>
-## Example Makefile
+注意： external必须写在文件头部第一行。
 
-  Below is an example Makefile used to compile _pages/*.jade_
-  into _pages/*.html_ files by simply executing `make`.
-
-_Note:_ If you try to run this snippet and `make` throws a `missing separator` error, you should make sure all indented lines use a tab for indentation instead of spaces. (For whatever reason, GitHub renders this code snippet with 4-space indentation although the actual README file uses tabs in this snippet.)
-
-```make
-JADE = $(shell find pages/*.jade)
-HTML = $(JADE:.jade=.html)
-
-all: $(HTML)
-
-%.html: %.jade
-	jade < $< --path $< > $@
-
-clean:
-	rm -f $(HTML)
-
-.PHONY: clean
-```
-
-this can be combined with the `watch(1)` command to produce
-a watcher-like behaviour:
-
-```bash
-$ watch make
-```
-
-<a name="a17"/>
-## jade(1)
-
-```
-
-Usage: jade [options] [dir|file ...]
-
-Options:
-
-  -h, --help         output usage information
-  -V, --version      output the version number
-  -o, --obj <str>    javascript options object
-  -O, --out <dir>    output the compiled html to <dir>
-  -p, --path <path>  filename used to resolve includes
-  -P, --pretty       compile pretty html output
-  -c, --client       compile for client-side runtime.js
-  -D, --no-debug     compile without debugging (smaller functions)
-
-Examples:
-
-  # translate jade the templates dir
-  $ jade templates
-
-  # create {foo,bar}.html
-  $ jade {foo,bar}.jade
-
-  # jade over stdio
-  $ jade < my.jade > my.html
-
-  # jade over stdio
-  $ echo "h1 Jade!" | jade
-
-  # foo, bar dirs rendering to /tmp
-  $ jade foo bar --out /tmp
-
-```
-
-<a name="a18"/>
-## Tutorials
-
-  - cssdeck interactive [Jade syntax tutorial](http://cssdeck.com/labs/learning-the-jade-templating-engine-syntax)
-  - cssdeck interactive [Jade logic tutorial](http://cssdeck.com/labs/jade-templating-tutorial-codecast-part-2)
-  - in [Japanese](http://blog.craftgear.net/4f501e97c1347ec934000001/title/10%E5%88%86%E3%81%A7%E3%82%8F%E3%81%8B%E3%82%8Bjade%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3)
-
-<a name="a19"/>
-## License
-
-(The MIT License)
-
-Copyright (c) 2009-2010 TJ Holowaychuk &lt;tj@vision-media.ca&gt;
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-'Software'), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+<a name="a2"/>
+# 词法
+<a name="a2-0"/>
+## 变量
