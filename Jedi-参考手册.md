@@ -231,7 +231,7 @@ hello world
 12345 {something}
 ```
 
-<a name="unsafe">
+<a name="unsafe"/>
 (8)不希望把[变量](#a2-0)的内容转义掉时，可以使用':unsafe'关键字，强制输出[变量](#a2-0)：
 ```
 :unsafe adsenseScript
@@ -383,9 +383,15 @@ foreach ($data->ads as $key => $ad)  {
 foreach ($data->list1 as $x) {
 	foreach ($data->list2 as $y) {
 		echo htmlspecialchars($x), htmlspecialchars(', '), htmlspecialchars($y);
-	}
+	} 
 }
 ```
+
+注意，后面的表达式不能引用前面的循环变量，如：
+```
+:for i in list1, j in i 
+```
+上面代码会出现编译错误。
 
 (4)循环控制[变量](#a2-0)可以写任何[表达式](#a2-1)：
 ```
