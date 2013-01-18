@@ -740,6 +740,7 @@ if (Category::exist($data->categoryName)) {
 ```
 
 (3)实例变量与实例方法用 点 '.' 连接。
+实例变量：
 ```
 "{ad.categoryEnglishName}
 ```
@@ -749,6 +750,7 @@ if (Category::exist($data->categoryName)) {
 <?= $ad->categoryEnglishName ?>
 ```
 
+实例方法：
 ```
 "{ad.user()}
 ```
