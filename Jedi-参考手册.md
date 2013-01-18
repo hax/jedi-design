@@ -715,7 +715,7 @@ if (Category::exist($data->categoryName)) {
 ## 表达式
 (1)运算符优先级：
 越往下优先级越高，同一行的运算符优先级一致。
-
+```
 "->" , "<-"
 
 "||" , "&&"
@@ -729,7 +729,7 @@ if (Category::exist($data->categoryName)) {
 "×" , "÷" , "mul" , "div" , "mod"
 
 '!' , "not"
-
+```
 (2)Jedi用if then else 替代 ? : 
 ```
 "{if x then '12345' else '54321'}
