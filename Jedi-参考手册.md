@@ -665,14 +665,14 @@ time.friendly =  ['12345', '23456']
 ```shell
 :external is_array
 :if is_array(a)
-	'Bigsheep
+	'hello world
 ```
 
 会被解析为：
 ```shell
 <?php
 if (is_array($data->a)) {
-	echo 'Bigsheep';
+	echo 'hello world';
 }
 ?>
 ```
@@ -682,14 +682,14 @@ Jedi:
 ```shell
 :external Category
 :if Category.exist(categoryName)
-	'Bigsheep
+	'hello world
 ```
 
 会被解析为：
 ```shell
 <?php
 if (Category::exist($data->categoryName)) {
-	echo 'Bigsheep';
+	echo 'hello world';
 }
 ?>
 ```
