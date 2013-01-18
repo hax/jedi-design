@@ -308,14 +308,14 @@ p 'bar
 script
 	!
 		_defer.push('/follow.js');
-		alert('bigsheep');
+		alert('hello world');
 ```
 
 会被解释为：
 ```
 <script>
 	_defer.push('/follow.js');
-	alert('bigsheep');
+	alert('hello world');
 </script>
 ```
 
@@ -506,32 +506,32 @@ div.content if a > b
 ## 注入
 (1)使用字符 '-' 可以向页面中注入PHP代码。  
 ```shell
--$varb = 'bigsheep';
+-$varb = 'hello world';
 ```
 
 会被解析为:
 ```shell
 <?php
-$varb = 'bigsheep';
+$varb = 'hello world';
 ?>
 ```
 
 (2)行末的';'可以省略，Jedi会自动添加分号。
 ```shell
--$varb = 'bigsheep'
+-$varb = 'hello world'
 ```
 
 会被解析为:
 ```shell
 <?php
-$varb = 'bigsheep';
+$varb = 'hello world';
 ?>
 ```
 
 (3)注入时注意末尾的';'，Jedi的自动添加可能会带来Bug。
 ```shell
 -for ($i = 0; $i < 10; $i++) {
--$varb = 'bigsheep';
+-$varb = 'hello world';
 -}
 ```
 
@@ -539,7 +539,7 @@ $varb = 'bigsheep';
 ```shell
 <?php
 for ($i = 0; $i < 10; $i++) {;
-$varb = 'bigsheep';
+$varb = 'hello world';
 };
 ?>
 ```
@@ -547,7 +547,7 @@ $varb = 'bigsheep';
 (4)'-'只会影响本行内容，它的子block会继续按照Jedi语法解析，并会自动添加大括号'{  }'。
 ```
 -for ($i = 0; $i < 10; $i++)
-	-$varb = 'bigsheep'
+	-$varb = 'hello world'
 ```
 
 会被解析为：
@@ -555,7 +555,7 @@ $varb = 'bigsheep';
 <?php
 for ($i = 0; $i < 10; $i++)
 {
-	$varb = 'bigsheep';
+	$varb = 'hello world';
 }
 ?>
 ```
@@ -740,7 +740,7 @@ if (Category::exist($data->categoryName)) {
 
 ```
 "{ad.user()}
-``` 
+```
 
 会被解析为
 ```
