@@ -8,7 +8,8 @@
         - [循环](#a1-4-0)
         - [条件判断](#a1-4-1)
         - [赋值](#a1-4-2)
-        - [其他](#a1-4-3)
+        - [关键字后置](#a1-4-3)
+        - [其他关键字](#a1-4-4)
     - [注入](#a1-5)
     - [模板继承](#a1-6)
     - [闭包](#a1-7)
@@ -230,6 +231,7 @@ hello world
 12345 {something}
 ```
 
+<a name="unsafe">
 (8)不希望把[变量](#a2-0)的内容转义掉时，可以使用':unsafe'关键字，强制输出[变量](#a2-0)：
 ```
 :unsafe adsenseScript
@@ -476,10 +478,23 @@ echo htmlspecialchars($data->x);
 ```
 
 <a name="a1-4-3"/>
+### 关键字后置
+关键字  if, for, let, else 可以写在标签后面
+```
+div.content if a > b
+```
+
+```
+<?php if ($data->a > $data->b) { ?>
+	<div class="content"></div>
+<?php } ?>
+```
+
+<a name="a1-4-4"/>
 ### 其他关键字：
-:unsafe
-:import
-:external
+[:unsafe](#unsafe)
+[:import](#a1-6)
+[:external](#a1-8)
 
 <a name="a1-5"/>
 ## 注入
