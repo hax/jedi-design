@@ -426,22 +426,22 @@ if ($data->a > $data->b) {
 (2):else 与 :else if 关键字： 
 ```shell
 :if a > b
-	'hello
+	'a bigger than b
 :else if a < b
-	'world
+	'a smaller than b
 :else
-	'earth
+	'a equals b
 ```
 
 会被解析为:
 ```shell
 <?php
 if ($data->a > $data->b) {
-	echo 'hello';
+	echo 'a bigger than b';
 } elseif ($data->a < $data->b) {
-	echo 'world';
+	echo 'a smaller than b';
 } else {
-	echo 'earth';
+	echo 'a equals b';
 }
 ?>
 ```
