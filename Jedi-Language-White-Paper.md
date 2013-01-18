@@ -343,6 +343,7 @@ div.text '12345
 # 逻辑代码
 <a name="a3-0" />
 ## 代码抑制（Suppress）和注入（Inject）
+###代码抑制
 (1)使用'//'可以注释掉一行代码，但是'//'必须写在行首。
 ```
 // just some paragraphs
@@ -379,31 +380,305 @@ p 'bar
 ?>
 ```
 
-指令（Instruction）
-变量（Variable）和作用域（Scope）
-外部函数和类（External）
-数据绑定（Data Binding）
-条件指令（Conditionals）
-迭代指令（Iteration）
-匹配（Match）
-抽象和复用机制
-元素模板（Element Template）
-内置元素模板（Built-in Templates）
-ol、ul 和 dl
-a
-script
-文档段（Fragment）和模板继承
-表达式
-值和类型
-文字（String）
-数字（Number）
-逻辑值（Boolean）
-时间（Date）
-序列（Sequence）
-元组（Tuple）
-记录（Record）
-运算符（Operator）
-函数和方法调用
-属性访问
-数组访问
-解构和匹配
+###代码注入
+(1)使用字符 '-' 可以向页面中注入PHP代码。  
+```shell
+-$varb = 'hello world';
+```
+
+会被解析为:
+```shell
+<?php
+$varb = 'hello world';
+?>
+```
+
+(2)行末的';'可以省略，Jedi会自动添加分号。
+```shell
+-$varb = 'hello world'
+```
+
+会被解析为:
+```shell
+<?php
+$varb = 'hello world';
+?>
+```
+
+(3)注入时注意末尾的';'，Jedi的自动添加可能会带来Bug。
+```shell
+-for ($i = 0; $i < 10; $i++) {
+-$varb = 'hello world';
+-}
+```
+
+会被解析为:
+```shell
+<?php
+for ($i = 0; $i < 10; $i++) {;
+$varb = 'hello world';
+};
+?>
+```
+
+(4)'-'只会影响本行内容，它的子block会继续按照Jedi语法解析，并会自动添加大括号'{  }'。
+```
+-for ($i = 0; $i < 10; $i++)
+	-$varb = 'hello world'
+```
+
+会被解析为：
+```
+<?php
+for ($i = 0; $i < 10; $i++)
+{
+	$varb = 'hello world';
+}
+?>
+```
+
+<a name="a3-1" />
+## 指令（Instruction）
+<a name="a1-4-0"/>
+### 循环
+<a name="a1-4-1"/>
+### 条件判断
+<a name="a1-4-2"/>
+### 赋值
+
+（1）:let关键字
+```shell
+:let x = 'hello world'
+	"{x}
+```
+
+会被解析为：
+```shell
+<?php
+call_user_func(function($x) {
+	echo htmlspecialchars($x);
+}, 'hello world');
+?>
+```
+
+(2)使用:let赋值时，被赋值的[变量](#a2-0)只在它的子block中有效：
+```shell
+"{x}
+:let x = 'hello world'
+	"{x}
+"{x}
+```
+
+会被解析为：
+```shell
+echo htmlspecialchars($data->x);
+<?php
+call_user_func(function($x) {
+	echo htmlspecialchars($x);
+}, 'hello world');
+?>
+echo htmlspecialchars($data->x);
+```
+
+<a name="a1-4-3"/>
+### 关键字后置
+关键字  if, for, let, else 可以写在标签后面
+```
+div.content if a > b
+```
+
+```
+<?php if ($data->a > $data->b) { ?>
+	<div class="content"></div>
+<?php } ?>
+```
+
+<a name="a1-4-4"/>
+### 其他关键字：
+[:unsafe](#unsafe) 
+[:import](#a1-6) 
+[:external](#a1-8) 
+
+<a name="a3-2">
+## 变量（Variable）和作用域（Scope）
+(1)Jedi变量由字母、数字和'$'组成，不能以数字开头。
+
+(2)变量默认被翻译为$data的属性，如'x'会被翻译为'$data->x'。
+
+(3)由:let和:for产生的临时变量不会被翻译为$data的属性。
+
+      如:let x='12345' 中， 变量 'x' 会被翻译为 '$x' 。
+
+(4)'$'会被当做一般字符进行翻译，如：
+
+      '$x'  会被翻译为   '$data->$x'
+
+<a name="a3-2">
+## 外部函数和类（External）
+
+(1)使用php函数  
+```shell
+:external is_array
+:if is_array(a)
+	'hello world
+```
+
+会被解析为：
+```shell
+<?php
+if (is_array($data->a)) {
+	echo 'hello world';
+}
+?>
+```
+
+(2)引用包涵静态方法的PHP类  
+```shell
+:external Category
+:if Category.exist(categoryName)
+	'hello world
+```
+
+会被解析为：
+```shell
+<?php
+if (Category::exist($data->categoryName)) {
+	echo 'hello world';
+}
+?>
+```
+
+注意： external必须写在文件头部第一行。
+
+## 数据绑定（Data Binding）
+<a name="a3-5" />
+## 条件指令（Conditionals）
+
+(1):if 关键字
+```shell
+:if a > b
+	'hello
+```
+
+会被解析为:
+```shell
+ <?php
+if ($data->a > $data->b) {
+	echo 'hello';
+}
+?>
+```
+
+(2):else 与 :else if 关键字： 
+```shell
+:if a > b
+	'a bigger than b
+:else if a < b
+	'a smaller than b
+:else
+	'a equals b
+```
+
+会被解析为:
+```shell
+<?php
+if ($data->a > $data->b) {
+	echo 'a bigger than b';
+} elseif ($data->a < $data->b) {
+	echo 'a smaller than b';
+} else {
+	echo 'a equals b';
+}
+?>
+```
+
+<a name="a3-6" />
+## 迭代指令（Iteration）
+(1)':for' 关键字  
+```
+:for ad in ads
+	"{ad}
+```
+
+会被解析为：
+```shell
+<?php
+foreach ($data->ads as $ad)  { 
+	echo htmlspecialchars($ad);
+}
+?>
+```
+
+(2)key，value形式  
+```
+:for (key, ad) in ads
+	"{key} {ad}
+```
+
+会被解析为：
+```shell
+<?php
+foreach ($data->ads as $key => $ad)  { 
+	echo htmlspecialchars($key), htmlspecialchars(' '), htmlspecialchars($ad);
+}
+?>
+```
+
+(3)多重嵌套的foreach循环：
+```
+:for x in list1, y in list2
+	"{x}, {y}
+```
+
+会被解析为：
+```
+foreach ($data->list1 as $x) {
+	foreach ($data->list2 as $y) {
+		echo htmlspecialchars($x), htmlspecialchars(', '), htmlspecialchars($y);
+	} 
+}
+```
+
+注意，后面的表达式不能引用前面的循环变量，如：
+```
+:for i in list1, j in i 
+```
+上面代码会出现编译错误。
+
+(4)循环控制[变量](#a2-0)可以写任何[表达式](#a2-1)：
+```
+:for x in [0..3]
+	"{x}
+```
+
+会被解析为：
+```
+foreach ([0..3] as $x) {
+	echo htmlspecialchars($x);
+}
+```
+
+<a name="a3-7" />
+## 匹配（Match）
+
+# 抽象和复用机制
+## 元素模板（Element Template）
+## 内置元素模板（Built-in Templates）
+### ol、ul 和 dl
+### a
+### script
+## 文档段（Fragment）和模板继承
+# 表达式
+## 值和类型
+### 文字（String）
+### 数字（Number）
+### 逻辑值（Boolean）
+### 时间（Date）
+### 序列（Sequence）
+### 元组（Tuple）
+### 记录（Record）
+## 运算符（Operator）
+## 函数和方法调用
+## 属性访问
+## 数组访问
+## 解构和匹配
