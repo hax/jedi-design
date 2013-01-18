@@ -466,7 +466,7 @@ call_user_func(function($x) {
 
 (2)使用:let赋值时，被赋值的[变量](#a2-0)只在它的子block中有效：
 ```shell
-”{x}
+"{x}
 :let x = 'hello world'
 	"{x}
 "{x}
@@ -498,9 +498,9 @@ div.content if a > b
 
 <a name="a1-4-4"/>
 ### 其他关键字：
-[:unsafe](#unsafe)
-[:import](#a1-6)
-[:external](#a1-8)
+[:unsafe](#unsafe) 
+[:import](#a1-6) 
+[:external](#a1-8) 
 
 <a name="a1-5"/>
 ## 注入
@@ -546,16 +546,18 @@ $varb = 'bigsheep';
 
 (4)'-'只会影响本行内容，它的子block会继续按照Jedi语法解析，并会自动添加大括号'{  }'。
 ```
--if ($data->x == 'hello world')
-	"{x}
+-for ($i = 0; $i < 10; $i++)
+	-$varb = 'bigsheep'
 ```
 
 会被解析为：
 ```
-if ($data->x == 'hello world')
+<?php
+for ($i = 0; $i < 10; $i++)
 {
-	echo htmlspecialchars(($data->x));
+	$varb = 'bigsheep';
 }
+?>
 ```
 
 <a name="a1-6"/>
@@ -698,12 +700,12 @@ if (Category::exist($data->categoryName)) {
 # 词法
 <a name="a2-0"/>
 ## 变量
-(1)Jedi变量由字母、数字和'$'组成，不能以数字开头。
-(2)变量默认被翻译为$data的属性，如'x'会被翻译为'$data->x'。
-(3)由:let和:for产生的临时变量不会被翻译为$data的属性。
-      如:let x='12345' 中， 变量 'x' 会被翻译为 '$x' 。
-(4)'$'会被当做一般字符进行翻译，如：
-      '$x'  会被翻译为   '$data->$x'
+(1)Jedi变量由字母、数字和'$'组成，不能以数字开头。 
+(2)变量默认被翻译为$data的属性，如'x'会被翻译为'$data->x'。 
+(3)由:let和:for产生的临时变量不会被翻译为$data的属性。 
+      如:let x='12345' 中， 变量 'x' 会被翻译为 '$x' 。 
+(4)'$'会被当做一般字符进行翻译，如： 
+      '$x'  会被翻译为   '$data->$x' 
 
 <a name="a2-1"/>
 ## 表达式
@@ -717,8 +719,7 @@ if (Category::exist($data->categoryName)) {
 "×" , "÷" , "mul" , "div" , "mod"
 '!' , "not"
 
-(2)if then else
-Jedi用if then else 替代 ? : 
+(2)Jedi用if then else 替代 ? : 
 ```
 "{if x then '12345' else '54321'}
 ```
@@ -730,7 +731,7 @@ Jedi用if then else 替代 ? :
 (3)实例变量与实例方法用 点 '.' 连接。
 ```
 "{ad.categoryEnglishName}
-``` 
+```
 
 会被解析为
 ```
