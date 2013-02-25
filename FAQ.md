@@ -1,9 +1,9 @@
 关于 Jedi 的与 Jade 相同或相似的语言特性设计的说明：
-* 为什么使用基于缩进的语法？
-* 为什么（只）为 id 属性和 class 属性设计了特殊语法（element#id 和 element.class）？
+* [为什么使用基于缩进的语法？](offside-rule)
+* [为什么（只）为 id 属性和 class 属性设计了特殊语法（element#id 和 element.class）？]
 
 关于 Jedi 的与 Jade 不同的语言特性设计的说明：
-* 为什么只支持 element.class#id 而不支持 element#id.class 的写法？
+* [为什么只支持 element.class#id 而不支持 element#id.class 的写法？]
 * 为什么 .class 和 #id 不像 Jade 那样默认生成 div 元素？
 * 为什么不用 Jade 的属性语法 element(attr1=value, attr2, ...) ，而要采用 @attr 的写法？
 * 为什么 subtemplate 要使用 element.class = model 的语法，而不用类似 Jade 的 简单 mixin f(params) 形式？
