@@ -506,28 +506,50 @@ div.content if a > b
 ## 注入
 (1)使用字符 '-' 可以向页面中注入PHP代码。  
 ```shell
--$varb = 'hello world';
+- $words = ['Hello', 'world!']
+- foreach ($words as $w)
+  - var_dump($greeting)
 ```
 
 会被解析为:
-```shell
+```php
 <?php
-$varb = 'hello world';
+  $words = ['Hello', 'world!']
+  foreach ($words as $w)
+  {
+    var_dump($greeting);
+  }
 ?>
 ```
 
-(2)行末的';'可以省略，Jedi会自动添加分号。
-```shell
--$varb = 'hello world'
-```
+注意编译器会自动加上分号或大括号。
 
-会被解析为:
-```shell
+(2) 如果要访问传给模板的数据，需要用到 $data 变量。
+```jedi
+= name
+:let name = 'hax'
+  - echo 'inner name: ', name
+  - echo 'outer name: ', $data->name
+```
+会被编译为:
+```php
 <?php
-$varb = 'hello world';
+  echo htmlspecialchars($data->name);
+  call_user_func(function ($name) use ($data) {
+    echo 'inner name: ', $name;
+    echo 'outer name: ', $data->name;
+  }, 'hax')
 ?>
 ```
 
+注意，现在编译器存在一个bug，即 use ($data) 只有在内部访问了模型数据才会被编译器加上，临时解决方案是引用任何一个模型数据内容，比如假设存在 title，则可将上面的代码写成：
+```jedi
+= name
+:let name = 'hax'
+  :let hack = title
+  - echo 'inner name: ', name
+  - echo 'outer name: ', $data->name
+```
 (3)注入时注意末尾的';'，Jedi的自动添加可能会带来Bug。
 ```shell
 -for ($i = 0; $i < 10; $i++) {
