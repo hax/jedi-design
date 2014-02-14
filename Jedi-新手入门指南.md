@@ -25,7 +25,7 @@
 第一步：搭建haojing环境。
 
 第二步：在htdocs/pages/  文件夹下新建jediTest.php：
-```shell
+```php
 <?php
 echo (new Template('jediTest'))->render();
 ?>
@@ -60,7 +60,7 @@ div @name="BigSheep" @nick="大绵羊"
 ```
 
 对应的HTML:
-```shell
+```html
 <div name="BisSheep" nick="大绵羊"></div>
 ```
 
@@ -71,7 +71,7 @@ Span.Big#sheep @name="BigSheep"
 ```
 
 对应的HTML:
-```shell
+```html
 <span class="Big" Id="sheep“ name="BigSheep"></span>
 ```
 
@@ -84,7 +84,7 @@ Jedi:
 ```
 
 对应的HTML:
-```shell
+```html
 12345^&*(
 ```
 
@@ -108,7 +108,7 @@ Jedi:
 ```
 
 对应的HTML:
-```shell
+```html
 <!-- 大绵羊是noooooooooooooob？！ -->
 ```
 
@@ -122,7 +122,7 @@ div
 ```
 
 对应的HTML：
-```shell
+```html
 <div>
 	12345
 </div>
@@ -135,7 +135,7 @@ div
 ```
 
 对应的HTML：
-```shell
+```html
 <div></div>
 12345
 ```
@@ -151,7 +151,7 @@ div
 ```
 
 对应的PHP:
-```shell
+```php
 <div>
 	<span class="Big" Id="sheep" name="BigSheep">
 		12345
@@ -173,7 +173,7 @@ Jedi:
 ```
 
 对应的PHP:
-```shell
+```php
 <?php
 foreach ($data->sheeps as $sheep)  { 
 	echo htmlspecialchars($sheep);
@@ -189,7 +189,7 @@ Jedi:
 ```
 
 对应的PHP：
-```shell
+```php
 <?php
 foreach ($data->sheeps as $key => $value)  { 
 	echo htmlspecialchars($key), htmlspecialchars(' '), htmlspecialchars($value);
@@ -207,7 +207,7 @@ Jedi:
 ```
 
 对应的PHP:
-```shell
+```php
  <?php
 if ($data->a > $data->b) {
 	echo 'bigsheep';
@@ -227,7 +227,7 @@ Jedi:
 ```
 
 对应的PHP:
-```shell
+```php
 <?php
 if ($data->a > $data->b) {
 	echo 'huge sheep';
@@ -249,7 +249,7 @@ Jedi：
 ```
 
 对应的PHP：
-```shell
+```php
 <?php
 $bigsheep = '杨敏达';
 echo htmlspecialchars($bigsheep);
@@ -266,7 +266,7 @@ Jedi(设$data->a的值为字符串’1234’):
 ```
 
 最后输出到页面上的结果：
-```shell
+```html
 1234
 4321
 1234
@@ -283,7 +283,7 @@ Jedi:
 ```
 
 对应的PHP:
-```shell
+```php
 <?php
 $clever = BigSheep::isShaBiOrNot('yangminda');
 ?>
@@ -299,7 +299,7 @@ script
 ```
 
 对应的HTML：
-```shell
+```html
 <script>
 	_defer.push('/follow.js');
 	alert('bigsheep');
@@ -316,7 +316,7 @@ Jedi:
 ```
 
 对应的PHP:
-```shell
+```php
 <?php
 //我是大绵羊
 //双斜杠必须写在行首
@@ -333,7 +333,7 @@ Jedi:
 ```
 
 对应的PHP:
-```shell
+```php
 <?php
 /*
  *div.bigsheep
@@ -356,7 +356,7 @@ Jedi:
 ```
 
 对应的PHP：
-```shell
+```php
 <?php
 if (is_array($data->a)) {
 	echo 'Bigsheep';
@@ -373,7 +373,7 @@ Jedi:
 ```
 
 对应的PHP：
-```shell
+```php
 <?php
 if (Category::exist($data->categoryName)) {
 	echo 'Bigsheep';
@@ -405,7 +405,7 @@ Jedi：
 ```
 
 对应的PHP：
-```shell
+```php
 <?= $data->ad->categoryEnglishName); ?>
 ```
 
@@ -416,7 +416,7 @@ Jedi：
 ```
 
 对应的PHP:
-```shell
+```php
 <?=  $data->ad->getPrice($data->adId); ?>
 ```
 
@@ -427,7 +427,7 @@ Jedi：
 ```
 
 对应的PHP：
-```shell
+```php
 <?= $data->$variableName?>
 ```
 
@@ -440,7 +440,7 @@ Jedi：
 ```
 
 对应的PHP:
-```shell
+```php
 <?=  ($data->a + $data->b) * !$data->c ?>
 ```
 
@@ -451,7 +451,7 @@ Jedi:
 ```
 
 对应的PHP：
-```shell
+```php
 <?= $data->a > $data->b ? 'good' : 'bad' ?>
 ```
 
@@ -517,7 +517,7 @@ time.friendly =  '12345' 	( 引用闭包，参数为‘12345’ )
 
 
 输出到页面上的结果：
-```shell
+```html
 12345
 ```
 
@@ -531,7 +531,7 @@ time.friendly =  ['12345', '54321']
 ```
 
 输出到页面上的结果：
-```shell
+```html
 12345
 54321
 ```
