@@ -49,7 +49,7 @@ div
 ```
 
 对应的HTML:
-```shell
+```html
 <div></div>
 ```
 
