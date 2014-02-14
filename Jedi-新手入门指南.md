@@ -95,7 +95,7 @@ Jedi：
 ```
 
 对应的PHP:
-```shell
+```php
 <?php
 echo htmlspecialchars($data->bigsheep);             (view中的数据都默认作为$data的属性出现)
 ?>
