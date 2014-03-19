@@ -470,7 +470,7 @@ head
 
 Bigsheep.jedi:
 ```shell
-:Import  layout
+:import  layout
 	#body::before
 		//Bigsheep.jedi引用了模板layout.jedi
 		//在body的内容前增加内容
