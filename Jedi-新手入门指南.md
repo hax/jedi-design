@@ -114,6 +114,8 @@ Jedi:
 
 ### 三、层次关系
 
+Note: 缩进必须使用 <key>tab</key> 字符
+
 1）Jedi由缩进表达层级关系。  
 Jedi：
 ```shell
