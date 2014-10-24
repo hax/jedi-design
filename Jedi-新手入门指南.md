@@ -114,7 +114,8 @@ Jedi:
 
 ### 三、层次关系
 
-Note: 缩进必须使用 <key>tab</key> 字符
+Note: 缩进必须使用 <key>tab</key> 字符，
+否则会报错 `tried to apply undefined rule "MixedWhitespace"`
 
 1）Jedi由缩进表达层级关系。  
 Jedi：
