@@ -584,8 +584,9 @@ for ($i = 0; $i < 10; $i++)
 ```
 
 <a name="a1-9"/>
+
 ## 向JS脚本注入PHP变量
-使用类似mixin的语法，`script = _expression_`。
+使用类似mixin的语法，`script = expression`。
 该语句会被编译成JS函数(IIFE)，其参数是`data`,data的值就是expression，在PHP中通过json_encode传给js
 示例：
 ```
@@ -599,6 +600,7 @@ script = [formatImages]
 <script>function(data) {
     window.__formatImages = data[0]
 }(true)</script>
+```
 
 <a name="a1-6"/>
 ## 模板继承
