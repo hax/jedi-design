@@ -11,6 +11,7 @@
         - [关键字后置](#a1-4-3)
         - [其他关键字](#a1-4-4)
     - [注入](#a1-5)
+    - [向JS脚本注入](#a1-9)
     - [模板继承](#a1-6)
     - [闭包](#a1-7)
     - [外部函数与静态方法](#a1-8)
@@ -581,6 +582,23 @@ for ($i = 0; $i < 10; $i++)
 }
 ?>
 ```
+
+<a name="a1-9"/>
+## 向JS脚本注入PHP变量
+使用类似mixin的语法，`script = _expression_`。
+该语句会被编译成JS函数(IIFE)，其参数是`data`,data的值就是expression，在PHP中通过json_encode传给js
+示例：
+```
+// suppose formatImages = true 
+script = [formatImages]
+	!
+		window.__formatImages = data[0]
+```
+会被编译成类似
+```
+<script>function(data) {
+    window.__formatImages = data[0]
+}(true)</script>
 
 <a name="a1-6"/>
 ## 模板继承
