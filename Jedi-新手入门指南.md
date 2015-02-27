@@ -9,6 +9,7 @@
     - [0 成员方法、成员变量与表达式](#a2-0)
     - [1 模板继承](#a2-1)
     - [2 闭包](#a2-2)
+    - [3 JS插值](#a2-3)
 
 <a name="a1"/>
 # 第一章 新手入门
@@ -539,4 +540,21 @@ time.friendly =  ['12345', '54321']
 54321
 ```
 
-<a name="a3"/>
+**注意！不要和Jade中的表达式输出搞混了！**
+
+Jade: `span.test= "expression"` => `<span class="test">expression</span>`
+
+Jedi: `span.test= "expression"` => `Undefined Mixin!`
+
+
+<a name="a2-3"/>
+## 3.脚本插值
+向JS脚本里传PHP变量的语法与闭包类似。在`script`标签后面加上等号，等号后面加上想要传递的值即可。
+在生产的js代码里，会被注入一个名字叫`data`的变量
+
+```
+script = "Big Sheep"
+    !
+        alert(data)
+```
+生成的代码就会弹出`Big Sheep`的窗口
