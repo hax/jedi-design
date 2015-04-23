@@ -14,7 +14,7 @@
 <a name="a1"/>
 # 第一章 新手入门
 
-必备技能：HTML，java script， PHP。
+必备技能：HTML，JavaScript，PHP。
 
 本章将介绍怎样用Jedi完成简单的网页。
 
