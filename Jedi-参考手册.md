@@ -396,13 +396,13 @@ foreach ($data->list1 as $x) {
 
 (4)循环控制[变量](#a2-0)可以写任何[表达式](#a2-1)：
 ```
-:for x in [0..3]
+:for x in 0...3
 	"{x}
 ```
 
 会被解析为：
 ```
-foreach ([0..3] as $x) {
+foreach (range(0, 3) as $x) {
 	echo htmlspecialchars($x);
 }
 ```
