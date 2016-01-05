@@ -1,3 +1,5 @@
+# 为什么需要 external 指令？
+
 之所以需要声明external出于两个原因。
 
 首先，不进行声明，jedi的PHP编译器无法区分是 $data->isset(x) 还是 isset(x) ，尽管我们从来不写前者，但是我感觉没有足够的理由去禁止这种可能——尤其是考虑有交互或表单的页面，模型上直接给方法如model.action()也许正是合理的设计。另外如果不加声明，编译器也无法区分 $data->Category->load 还是 Category::load。
