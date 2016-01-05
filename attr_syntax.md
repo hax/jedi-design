@@ -1,4 +1,4 @@
-# 为什么不用 Jade 的属性语法 element(attr1=value, attr2, ...) ，而要采用 @attr 的写法？
+# 为什么不用 Jade 的属性语法 `element(attr1=value, attr2, ...)`，而要采用 `@attr` 的写法？
 
 attribute的语法其实我反复考虑和纠结过。像script和style要加上 ! 也是由于attribute的设计原则导致的。
 
