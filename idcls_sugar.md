@@ -1,6 +1,6 @@
 # 为什么（只）为 id 属性和 class 属性设计了特殊语法（`element#id` 和 `element.class`）？
 
-这个设计其实是 follow CSS 的设计 —— jedi 里有许多语法是直接照搬 CSS 的。
+这个设计其实是 follow CSS 的设计 —— Jedi 里有许多语法是直接照搬 CSS 的。
 
 这些地方包括：
 
